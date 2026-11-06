@@ -54,7 +54,10 @@ def _export_html_wasm(notebook_path: Path, output_dir: Path, as_app: bool = Fals
     # Configure export mode based on whether it's an app or a notebook
     if as_app:
         logger.info(f"Exporting {notebook_path} to {output_path} as app")
-        cmd.extend(["--mode", "run", "--no-show-code"])  # Apps run in "run" mode with hidden code
+        # Run mode, with the source shown: a reader of an analytic workbook should be able to
+        # see the cells behind a number. Edit mode is not an option here - it opens without
+        # executing, so the page renders as source and nothing else.
+        cmd.extend(["--mode", "run", "--show-code"])
     else:
         logger.info(f"Exporting {notebook_path} to {output_path} as notebook")
         cmd.extend(["--mode", "edit"])  # Notebooks run in "edit" mode
